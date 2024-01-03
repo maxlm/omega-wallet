@@ -1,0 +1,35 @@
+.page {
+  min-height: 100vh;
+  background-color: $color-primary-bg;
+  background-image: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-content {
+  transition: all 0.2s ease-in-out;
+}
+
+.section-title {
+  color: #242d38;
+}
+
+@media (min-width: 1024px) {
+  .App {
+    background-color: $color-primary-bg;
+  }
+
+  .page {
+    padding-bottom: 80px;
+  }
+
+  .page-wrapper {
+    position: relative;
+    display: flex;
+    overflow: auto;
+    .page-content {
+      position: relative;
+      width: 660px;
+    }
+  }
+}

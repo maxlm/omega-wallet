@@ -1,0 +1,13 @@
+@import 'theme.scss';
+@import 'reset.scss';
+@import 'helpers.scss';
+@import 'functions.scss';
+
+@import 'ui/common.scss';
+@import 'ui/button.scss';
+@import 'ui/circular-loader.scss';
+@import 'ui/form.scss';
+@import 'app/page-header.scss';
+@import 'app/app.scss';
+@import 'app/pages/create-wallet/phrase-container.scss';
+@import 'app/pages/choose-provider.scss';

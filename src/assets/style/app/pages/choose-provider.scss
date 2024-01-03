@@ -1,0 +1,17 @@
+.choose-provider-page {
+  .provider-icon-container {
+    margin-right: 20px;
+  }
+  .provider-icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .btn-list .btn {
+    display: flex;
+    align-items: center;
+  }
+  .btn-list .btn:not(:first-child) {
+    margin-top: 10px;
+  }
+}

@@ -1,0 +1,23 @@
+.phrase-container {
+  .phrase-buttons {
+    display: flex;
+    justify-content: flex-end;
+  }
+  .phrase-buttons .btn:not(:first-child) {
+    margin-left: 10px;
+  }
+
+  .phrase {
+    border: 1px dashed black;
+    margin-top: 20px;
+    padding: 5px 5px 20px 20px;
+    color: $text-color-primary-bg;
+    font-size: 14px;
+    font-weight: 400;
+  }
+
+  .phrase-text {
+    padding: 0 15px 15px 0;
+    margin-top: 20px;
+  }
+}

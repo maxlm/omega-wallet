@@ -1,0 +1,37 @@
+// mixins for generic media queries
+@mixin fromSize($size) {
+  @media screen and (min-width: $size) {
+    @content;
+  }
+}
+
+@mixin untilSize($size) {
+  @media screen and (max-width: $size) {
+    @content;
+  }
+}
+
+// mixins for media queries for standard devices
+@mixin mobile {
+  @media screen and (max-width: $tablet - 1) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media screen and (min-width: $tablet) {
+    @content;
+  }
+}
+
+@mixin laptop {
+  @media screen and (min-width: $laptop) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media screen and (min-width: $desktop) {
+    @content;
+  }
+}

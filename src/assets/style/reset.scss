@@ -1,0 +1,96 @@
+html,
+body,
+p,
+ol,
+ul,
+li,
+dl,
+dt,
+dd,
+blockquote,
+figure,
+fieldset,
+legend,
+textarea,
+pre,
+iframe,
+hr,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  padding: 0;
+}
+
+// Headings
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: 100%;
+  font-weight: normal;
+}
+
+// List
+ul {
+  list-style: none;
+}
+
+// Form
+button,
+input,
+select,
+textarea {
+  margin: 0;
+  font-family: 'Roboto';
+}
+
+// Box sizing
+* {
+  box-sizing: border-box;
+  // outline: none;
+}
+
+// Media
+img,
+video {
+  height: auto;
+  max-width: 100%;
+}
+
+// Iframe
+iframe {
+  border: 0;
+}
+
+// Table
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+td,
+th {
+  padding: 0;
+}
+
+th:not([align]) {
+  text-align: left;
+}
+
+// App specific reset
+
+button.card {
+  border: none;
+  text-align: left;
+  align-items: unset;
+}
+
+::-ms-reveal {
+  display: none;
+}

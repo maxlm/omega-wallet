@@ -1,0 +1,30 @@
+$mobile: 479px !default;
+$tablet: 769px !default;
+$laptop: 1025px !default;
+$desktop: 1281 !default;
+
+// colors
+$color-primary: #096dd9; //#f4616b; //#f67f63;
+$color-white: #fff;
+$color-black: #000;
+$color-primary-bg: #f6f6f6;
+$color-secondary-bg: #e1e5ee;
+$color-header-primary-bg: #475a79;
+
+$color-success: #55a266;
+$color-warning: #f4616b;
+$color-icon: #475a79;
+/// text on background
+$text-color-secondary-bg: #8a93a1;
+
+/// text on primary color
+$text-color-primary-bg: #242d38;
+
+// fonts
+$font-family-primary: 'Roboto', sans-serif;
+$font-family-secondary: 'Helvetica', sans-serif;
+
+// $mt-bg-color: #24272a
+// $mt-primary-color: #1098fc
+// $mt-white-xolor: #fcfcfc
+// $mt-muted-primary: #1098fc26

@@ -1,0 +1,39 @@
+.page {
+  min-height: 100vh;
+  background-color: $color-primary-bg;
+  background-image: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.section-title {
+  font-family: $font-family-primary;
+  font-size: 20px;
+  color: $color-white;
+  font-weight: 700;
+  text-align: center;
+}
+
+.section {
+  padding: 0 25px;
+  margin-top: 30px;
+}
+
+.section-subtitle {
+  font-size: 16px;
+  color: $text-color-primary-bg;
+  font-family: $font-family-primary;
+  font-weight: 600;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.pad-items-left > *:not(:first-child) {
+  margin-left: 10px;
+}
+
+.text-clipping {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
