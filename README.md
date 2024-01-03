@@ -117,9 +117,11 @@ it set up to work with local netwok like hardhat or ganache. Ganache used by def
   ![Password protection](doc/images/password_protection.jpg)
   
 ## What's not implemented
+
 -- ehh_sendTransaction and related user interaction with approval <a name="Whats_not"></a>
 --
 Had no time to implement that feature at the moment of submission. That would take 1-2 days more
+
 -- Tests
 --
 had no time for tests at the moment of submission. Code been written with tests in mind. Almost all components easily testable or mockable: Epics are pure functions and easy to test. UI decoupled from logic via redux. Basically all it does - dispatches actions. Dependencies injected into epics. Sure, tests will raise some problems, but, as I already said, had no time for tests at the moment of submission
