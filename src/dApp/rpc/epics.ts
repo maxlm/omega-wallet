@@ -11,14 +11,16 @@ import { popupRoutes } from '@root/src/shared/routing/popupRoutes';
 export const rpcEpic: Epic<unknown, unknown, AppState> = (
   action$,
   state$,
-  { extensionApi, walletApi }: DependencyContainer,
+  { extensionApi, walletApi, appStorage }: DependencyContainer,
 ) =>
   action$.pipe(
     ofType(RpcActionTypes.ETH_RPC_REQUEST),
     mergeMap(async (action: EthRpcRequestAction) => {
       const { messageId, senderId, data } = action.payload;
 
-      const userHasWallet = state$.value.wallet.hasWalletStored;
+      const { key } = await appStorage.keyStorage.get();
+
+      const userHasWallet = Boolean(key);
       const requirePassword = state$.value.wallet.requirePassword;
 
       const sendRequest = async () => {
