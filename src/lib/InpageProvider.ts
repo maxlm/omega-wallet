@@ -11,6 +11,7 @@ export class InpageProvider implements Eip1193Provider {
     this._init();
   }
   public async request<T = unknown>(request: RequestArguments): Promise<Partial<T>> {
+    this._trySetCurrentProvider();
     if (!this._currentProvider) {
       const response = await this._promptSelectProvider();
       if (response?.providerId) {
@@ -47,5 +48,12 @@ export class InpageProvider implements Eip1193Provider {
   };
   private _promptSelectProvider = () => {
     return this._owProvider.requestProvider(this.providerDetails.map(detail => detail.info));
+  };
+  private _trySetCurrentProvider = () => {
+    if (!this._currentProvider) {
+      if (this.providerDetails.length == 1) {
+        this._currentProvider = this.providerDetails[0].provider;
+      }
+    }
   };
 }
