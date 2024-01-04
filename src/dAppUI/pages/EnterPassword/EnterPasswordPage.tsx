@@ -5,7 +5,7 @@ import { PageHeader } from '../../components/PageHeader/PageHeader';
 import { PasswordInput } from '../../components/form/PasswordInput';
 import { initWalletRequestAction, restoreWalletRequestAction, setPasswordAction } from '@root/src/dApp/wallet/actions';
 import { useSearchParams } from 'react-router-dom';
-import { makePasswordValidator } from '@root/src/shared/utils';
+import { delay, makePasswordValidator } from '@root/src/shared/utils';
 import { r } from '../../routes/routePaths';
 import { useAction } from '@root/src/shared/redux/hooks/useAction';
 import { CircularLoader } from '../../components/Loader/CircularLoader';
@@ -45,14 +45,13 @@ export const EnterPasswordPage = () => {
         password,
       });
       await initWallet();
-      await restoreWallet({ password });
+      await delay(300);
 
       if (isPopup) {
         window.close();
       } else {
         navigate(r['/home']);
       }
-    } catch (e) {
     } finally {
       setIsloading(false);
     }

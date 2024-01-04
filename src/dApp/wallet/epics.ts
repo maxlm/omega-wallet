@@ -25,9 +25,6 @@ export const createWalletEpic: Epic = (action$, _, { walletApi, appStorage, memo
     mergeMap(async (action: CreateWalletRequestAction) => {
       try {
         let password = action.payload.password;
-        if (!password) {
-          password = await memoryStore.getPassword();
-        }
         const { wallet, phrase } = walletApi.createWallet(action.payload.phrase);
         const balance = await walletApi.getBalance(wallet.address);
         const key = CryptoJS.AES.encrypt(wallet.privateKey, password);
@@ -41,18 +38,13 @@ export const createWalletEpic: Epic = (action$, _, { walletApi, appStorage, memo
 
         await memoryStore.setPassword(password);
 
-        return [
-          createWalletSuccessAction({
-            address: wallet.address,
-            secured: false,
-            balance,
-            phrase,
-            requirePassword: !Boolean(password),
-          }),
-          restoreWalletRequestAction({
-            password,
-          }),
-        ];
+        createWalletSuccessAction({
+          address: wallet.address,
+          secured: false,
+          balance,
+          phrase,
+          requirePassword: !Boolean(password),
+        });
       } catch (error) {
         return createWalletErrorAction({ error });
       }

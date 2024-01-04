@@ -20,7 +20,7 @@ export const HomePage = () => {
         await initWallet();
         await restoreWallet({});
         // UI unpleasantly blinks on local network node
-        await delay(200);
+        await delay(300);
       } finally {
         setIsLoading(false);
       }

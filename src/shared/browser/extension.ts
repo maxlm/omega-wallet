@@ -51,7 +51,5 @@ export function buildExtensionRoutePath({ route, qs }: { route?: string; qs?: st
 
 export const connectToBackground = (name: string) => browser.runtime.connect({ name });
 
-// const connectToContent = (name: string) => browser.tabs.connect({ name });
-
 export const handleConnection = (callback: (port: browser.Runtime.Port) => void) =>
   browser.runtime.onConnect.addListener(callback);

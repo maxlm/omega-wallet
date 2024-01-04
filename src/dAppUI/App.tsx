@@ -8,7 +8,7 @@ import { CreateWalletPage } from './pages/CreateWallet/CreateWalletPage';
 import { RestoreWalletPage } from './pages/RestoreWallet/RestoreWalletPage';
 import { HomePage } from './pages/Home/HomePage';
 import { useAction } from '../shared/redux/hooks/useAction';
-import { initWalletRequestAction, restoreWalletRequestAction } from '../dApp/wallet/actions';
+import { initWalletRequestAction } from '../dApp/wallet/actions';
 import { CircularLoader } from './components/Loader/CircularLoader';
 import { selectIsWalletStored, selectRequirePassword } from '../dApp/wallet/selectors';
 import { ChooseProviderpage } from './pages/ChooseProvider/ChooseProviderpage';
@@ -21,17 +21,13 @@ import { RestoreWalletCreatePasswordPage } from './pages/RestoreWalletCreatePass
 export const App = () => {
   const [isLoading, setIsLoading] = useState(true);
   const initWallet = useAction(initWalletRequestAction<void>);
-  const restoreWallet = useAction(restoreWalletRequestAction);
   useEffect(() => {
     const init = async () => {
       try {
         setIsLoading(true);
         await initWallet();
-        await restoreWallet({});
         // simulate network delay for demonstration purpose
         await delay(1000);
-      } catch (e) {
-        console.error(e);
       } finally {
         setIsLoading(false);
       }
