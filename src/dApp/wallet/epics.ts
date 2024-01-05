@@ -38,7 +38,7 @@ export const createWalletEpic: Epic = (action$, _, { walletApi, appStorage, memo
 
         await memoryStore.setPassword(password);
 
-        createWalletSuccessAction({
+        return createWalletSuccessAction({
           address: wallet.address,
           secured: false,
           balance,
