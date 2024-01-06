@@ -5,13 +5,6 @@ import { ERROR_SYMBOL } from '../webext-redux/shared';
 
 type AnyFunction = (...args: any[]) => any;
 
-export function useAction<T extends AnyFunction>(creator: T) {
-  const dispatch = useDispatch() as (action: UnknownAction) => Promise<any>;
-  return useMemo(() => {
-    return (...args: Parameters<T>) => dispatch(creator(...args));
-  }, [creator, dispatch]);
-}
-
 export function useActionAsync<T extends AnyFunction>(creator: T) {
   const dispatch = useDispatch() as (action: UnknownAction) => Promise<any>;
   return useMemo(() => {

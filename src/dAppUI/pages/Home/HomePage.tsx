@@ -3,14 +3,14 @@ import { useSelector } from 'react-redux';
 import { selectCurrentWallet } from '@root/src/dApp/wallet/selectors';
 
 import { useEffect, useState } from 'react';
-import { useAction, useActionAsync } from '@root/src/shared/redux/hooks/useAction';
+import { useActionAsync } from '@root/src/shared/redux/hooks/useAction';
 import { initWalletRequestAction, restoreWalletRequestAction } from '@root/src/dApp/wallet/actions';
 import { CircularLoader } from '../../components/Loader/CircularLoader';
-import { delay } from 'rxjs';
+import { delay } from '@root/src/shared/utils';
 
 export const HomePage = () => {
   const initWallet = useActionAsync(initWalletRequestAction<void>);
-  const restoreWallet = useAction(restoreWalletRequestAction);
+  const restoreWallet = useActionAsync(restoreWalletRequestAction);
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     const init = async () => {

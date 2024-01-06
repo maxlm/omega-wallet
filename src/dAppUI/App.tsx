@@ -7,7 +7,7 @@ import { OnboardingPage } from './pages/Onboarding/OnboardingPage';
 import { CreateWalletPage } from './pages/CreateWallet/CreateWalletPage';
 import { RestoreWalletPage } from './pages/RestoreWallet/RestoreWalletPage';
 import { HomePage } from './pages/Home/HomePage';
-import { useAction } from '../shared/redux/hooks/useAction';
+import { useActionAsync } from '../shared/redux/hooks/useAction';
 import { initWalletRequestAction } from '../dApp/wallet/actions';
 import { CircularLoader } from './components/Loader/CircularLoader';
 import { selectIsWalletStored, selectRequirePassword } from '../dApp/wallet/selectors';
@@ -20,7 +20,7 @@ import { RestoreWalletCreatePasswordPage } from './pages/RestoreWalletCreatePass
 
 export const App = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const initWallet = useAction(initWalletRequestAction<void>);
+  const initWallet = useActionAsync(initWalletRequestAction<void>);
   useEffect(() => {
     const init = async () => {
       try {

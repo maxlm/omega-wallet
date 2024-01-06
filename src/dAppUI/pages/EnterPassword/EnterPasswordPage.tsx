@@ -7,12 +7,12 @@ import { initWalletRequestAction, setPasswordAction } from '@root/src/dApp/walle
 import { useSearchParams } from 'react-router-dom';
 import { delay, makePasswordValidator } from '@root/src/shared/utils';
 import { r } from '../../routes/routePaths';
-import { useAction, useActionAsync } from '@root/src/shared/redux/hooks/useAction';
+import { useActionAsync } from '@root/src/shared/redux/hooks/useAction';
 import { CircularLoader } from '../../components/Loader/CircularLoader';
 
 export const EnterPasswordPage = () => {
   const sendPasswordToBg = useActionAsync(setPasswordAction);
-  const initWallet = useAction(initWalletRequestAction<void>);
+  const initWallet = useActionAsync(initWalletRequestAction<void>);
   const navigate = useNavigate();
   const [params] = useSearchParams();
   const openedFromBackground = Boolean(params.get('__bg'));

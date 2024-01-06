@@ -6,13 +6,13 @@ import { createWalletRequestAction } from '@root/src/dApp/wallet/actions';
 import { r } from '../../routes/routePaths';
 import { CircularLoader } from '../../components/Loader/CircularLoader';
 import { CreatePasswordForm } from '../../components/app/CreatePasswordForm';
-import { useAction } from '@root/src/shared/redux/hooks/useAction';
+import { useActionAsync } from '@root/src/shared/redux/hooks/useAction';
 
 export const RestoreWalletCreatePasswordPage = () => {
   const {
     state: { phrase },
   } = useLocation();
-  const restoreWallet = useAction(createWalletRequestAction);
+  const restoreWallet = useActionAsync(createWalletRequestAction);
   const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();

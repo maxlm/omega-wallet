@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 
-import { useAction } from '@root/src/shared/redux/hooks/useAction';
+import { useActionAsync } from '@root/src/shared/redux/hooks/useAction';
 import { PageHeader } from '../../components/PageHeader/PageHeader';
 import { AppState } from '@root/src/dApp/reducer';
 import { selectSenderProviders } from '@root/src/dApp/inpage-interaction/selectors';
@@ -17,8 +17,8 @@ export const ChooseProviderpage = () => {
     return selectSenderProviders(state, senderId);
   });
   const [providers, setProviders] = useState<EIP6963ProviderInfo[]>([]);
-  const clearProvidersInStore = useAction(clearProviderSelection);
-  const selectProvider = useAction(providerSelectedAction);
+  const clearProvidersInStore = useActionAsync(clearProviderSelection);
+  const selectProvider = useActionAsync(providerSelectedAction);
 
   useEffect(() => {
     if (selectedProviders && selectedProviders.length && !providers.length) {
