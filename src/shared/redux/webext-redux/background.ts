@@ -4,6 +4,22 @@ import { ERROR_SYMBOL } from './shared';
 // this is a workaround/extension to  webext-redux
 // main goal is to be able to pass errors from background to actions that triggered epics in UI
 // here we apply error symbol to our payload when error must be shown on client
+// this allows following error passing mechanism bypassing store:
+
+//  AppPage.tsx
+//      const action = useActionAsync(actionCreator)
+//      try {
+//          await action(payload)
+//      } catch (e) {
+//          showErrorOnUI(e.message)
+//      }
+
+//  epics.ts
+//   mergeMap(async (action: ReduxAction) => {
+//      if(actionMustEmitError) {
+//          notifyError(action, "some business rule didn't met")
+//      }
+//   })
 
 // for actual error handling see useAction in redux/hooks/useAction
 export async function dispatchResponder(dispatchResult, send) {

@@ -34,7 +34,6 @@ export const rpcEpic: Epic<unknown, unknown, AppState> = (
             },
           });
         } catch (error) {
-          console.log(error, 'rpcerror');
           await extensionApi.tabs.sendMessage({
             tabId: senderId,
             messageId,
