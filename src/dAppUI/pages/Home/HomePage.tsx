@@ -1,16 +1,15 @@
 import { PageHeader } from '../../components/PageHeader/PageHeader';
 import { useSelector } from 'react-redux';
-import { selectCurrentWallet, selectIsWalletStored } from '@root/src/dApp/wallet/selectors';
-import { Navigate } from 'react-router-dom';
-import { r } from '../../routes/routePaths';
+import { selectCurrentWallet } from '@root/src/dApp/wallet/selectors';
+
 import { useEffect, useState } from 'react';
-import { useAction } from '@root/src/shared/redux/hooks/useAction';
+import { useAction, useActionAsync } from '@root/src/shared/redux/hooks/useAction';
 import { initWalletRequestAction, restoreWalletRequestAction } from '@root/src/dApp/wallet/actions';
 import { CircularLoader } from '../../components/Loader/CircularLoader';
 import { delay } from 'rxjs';
 
 export const HomePage = () => {
-  const initWallet = useAction(initWalletRequestAction<void>);
+  const initWallet = useActionAsync(initWalletRequestAction<void>);
   const restoreWallet = useAction(restoreWalletRequestAction);
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
@@ -21,6 +20,7 @@ export const HomePage = () => {
         await restoreWallet({});
         // UI unpleasantly blinks on local network node
         await delay(300);
+      } catch (e) {
       } finally {
         setIsLoading(false);
       }

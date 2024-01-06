@@ -22,8 +22,10 @@ export const notifySuccess = (action: Action<string, any>) => {
   }
 };
 
-export const notifyFail = (action: Action<string, any>, reason = '') => {
-  if (action.meta?.reject) {
-    action.meta.reject(reason);
+export const notifyFail = (action: Action<string, any>, message = '') => {
+  if (action.meta) {
+    action.meta.error = {
+      message,
+    };
   }
 };

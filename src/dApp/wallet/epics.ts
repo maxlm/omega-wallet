@@ -14,9 +14,8 @@ import {
   createWalletErrorAction,
   restoreWalletErrorAction,
   initWalletSuccessAction,
-  restoreWalletRequestAction,
 } from './actions';
-import { concatActions, emptyAction } from '@root/src/shared/redux/redux-observable/helpers';
+import { concatActions, emptyAction, notifyFail } from '@root/src/shared/redux/redux-observable/helpers';
 import { DependencyContainer } from '../dependencies';
 
 export const createWalletEpic: Epic = (action$, _, { walletApi, appStorage, memoryStore }: DependencyContainer) =>
@@ -27,7 +26,7 @@ export const createWalletEpic: Epic = (action$, _, { walletApi, appStorage, memo
         let password = action.payload.password;
         const { wallet, phrase } = walletApi.createWallet(action.payload.phrase);
         const balance = await walletApi.getBalance(wallet.address);
-        const key = CryptoJS.AES.encrypt(wallet.privateKey, password);
+        const key = CryptoJS.AES.encrypt(wallet.privateKey, password).toString();
         appStorage.keyStorage.set(prev => {
           return {
             ...prev,
@@ -80,7 +79,7 @@ export const restoreWalletEpic: Epic = (action$, _, { walletApi, appStorage, mem
     concatActions(),
   );
 
-export const initWalletEpic: Epic = (action$, _, { appStorage, memoryStore }: DependencyContainer) =>
+export const initWalletEpic: Epic = (action$, _, { appStorage, memoryStore, extensionApi }: DependencyContainer) =>
   action$.pipe(
     ofType(WalletActionTypes.INIT_WALLET_REQUEST),
     mergeMap(async (action: InitWalletRequestAction) => {
@@ -99,11 +98,21 @@ export const initWalletEpic: Epic = (action$, _, { appStorage, memoryStore }: De
     concatActions(),
   );
 
-export const setPasswordEpic: Epic = (action$, _, { memoryStore }: DependencyContainer) =>
+export const setPasswordEpic: Epic = (action$, _, { memoryStore, appStorage }: DependencyContainer) =>
   action$.pipe(
     ofType(WalletActionTypes.SET_PASSWORD),
     mergeMap(async (action: SetPasswordAction) => {
       const { password } = action.payload;
+      const { key: originalKey } = await appStorage.keyStorage.get();
+      let decrypted: string;
+      try {
+        decrypted = CryptoJS.AES.decrypt(originalKey, password).toString(CryptoJS.enc.Utf8);
+      } catch (e) {}
+      if (!decrypted) {
+        notifyFail(action, 'wrong password');
+        return;
+      }
+
       await memoryStore.setPassword(password);
     }),
     emptyAction(),

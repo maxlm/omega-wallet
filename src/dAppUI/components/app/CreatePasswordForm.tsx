@@ -21,7 +21,7 @@ export const CreatePasswordForm = (props: CreatePasswordFormProps) => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     watch,
   } = useForm<{ password: string; reEnterPassword: string }>();
   const watchAllFields = watch();
@@ -47,7 +47,7 @@ export const CreatePasswordForm = (props: CreatePasswordFormProps) => {
         />
         <PasswordInput
           label=""
-          placeholder="Re-enter new password"
+          placeholder="Repeat password"
           name="reEnterPassword"
           error={getError(errors, 'reEnterPassword')}
           inputRef={register('reEnterPassword', {
@@ -61,7 +61,7 @@ export const CreatePasswordForm = (props: CreatePasswordFormProps) => {
         />
       </div>
       <div className="section">
-        <button type="submit" className="btn btn-primary w-full">
+        <button disabled={isSubmitting} type="submit" className="btn btn-primary w-full">
           {actionTitle}
         </button>
       </div>

@@ -3,20 +3,19 @@ import { useNavigate } from 'react-router-dom';
 
 import { PageHeader } from '../../components/PageHeader/PageHeader';
 import { PasswordInput } from '../../components/form/PasswordInput';
-import { initWalletRequestAction, restoreWalletRequestAction, setPasswordAction } from '@root/src/dApp/wallet/actions';
+import { initWalletRequestAction, setPasswordAction } from '@root/src/dApp/wallet/actions';
 import { useSearchParams } from 'react-router-dom';
 import { delay, makePasswordValidator } from '@root/src/shared/utils';
 import { r } from '../../routes/routePaths';
-import { useAction } from '@root/src/shared/redux/hooks/useAction';
+import { useAction, useActionAsync } from '@root/src/shared/redux/hooks/useAction';
 import { CircularLoader } from '../../components/Loader/CircularLoader';
 
 export const EnterPasswordPage = () => {
-  const restoreWallet = useAction(restoreWalletRequestAction);
-  const sendPasswordToBg = useAction(setPasswordAction);
+  const sendPasswordToBg = useActionAsync(setPasswordAction);
   const initWallet = useAction(initWalletRequestAction<void>);
   const navigate = useNavigate();
   const [params] = useSearchParams();
-  const isPopup = Boolean(params.get('__bg'));
+  const openedFromBackground = Boolean(params.get('__bg'));
   const [error, setError] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsloading] = useState(false);
@@ -41,17 +40,23 @@ export const EnterPasswordPage = () => {
       if (!isValidPassword(password)) {
         return;
       }
+
+      //emulate latency
+      await delay(300);
+
       await sendPasswordToBg({
         password,
       });
-      await initWallet();
-      await delay(300);
 
-      if (isPopup) {
+      await initWallet();
+
+      if (openedFromBackground) {
         window.close();
       } else {
         navigate(r['/home']);
       }
+    } catch (e) {
+      setError(e.message);
     } finally {
       setIsloading(false);
     }
@@ -72,7 +77,7 @@ export const EnterPasswordPage = () => {
         />
       </div>
       <div className="section">
-        <button onClick={submitPassword} className="btn btn-primary w-full">
+        <button disabled={isLoading} onClick={submitPassword} className="btn btn-primary w-full">
           Submit
         </button>
       </div>

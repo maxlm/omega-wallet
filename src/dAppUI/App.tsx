@@ -28,6 +28,8 @@ export const App = () => {
         await initWallet();
         // simulate network delay for demonstration purpose
         await delay(1000);
+      } catch (e) {
+        console.log(e);
       } finally {
         setIsLoading(false);
       }

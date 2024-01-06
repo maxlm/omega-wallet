@@ -41,7 +41,7 @@ export const PasswordInput = memo<TextInputProps>(function PasswordInput(props) 
           <div>{showPassword ? <EyeOpenIcon /> : <EyeCrossedIcon />}</div>
         </button>
       </div>
-      {error ? <div className="error-message">{error}</div> : null}
+      <div className={cx('error-message', Boolean(error) && 'visible', !Boolean(error) && 'hidden')}>{error}</div>
     </div>
   );
 });

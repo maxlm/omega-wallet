@@ -1,4 +1,5 @@
 import browser, { Tabs, Windows } from 'webextension-polyfill';
+import { getBaseURL } from './getBaseUrl';
 
 export async function openTab(params: Tabs.CreateCreatePropertiesType) {
   const tab = await browser.tabs.create(params);
@@ -6,7 +7,7 @@ export async function openTab(params: Tabs.CreateCreatePropertiesType) {
 }
 
 export async function getActiveTab() {
-  const tabs = await browser.tabs.query({ active: true, currentWindow: true });
+  const tabs = await browser.tabs.query({ active: true });
   return tabs[0];
 }
 
@@ -22,9 +23,6 @@ export function getCurrentWindow() {
   return browser.windows.getCurrent();
 }
 
-export function getBaseURL() {
-  return browser.runtime.getURL('src');
-}
 export function onceWindowClosed(windowId: number, callback: () => void | Promise<void>) {
   function onWindowClosed(closedWindowId) {
     if (closedWindowId === windowId) {
@@ -49,7 +47,9 @@ export function buildExtensionRoutePath({ route, qs }: { route?: string; qs?: st
   return path;
 }
 
-export const connectToBackground = (name: string) => browser.runtime.connect({ name });
+export * from './connectToBackground';
+
+export * from './getBrowserApi';
 
 export const handleConnection = (callback: (port: browser.Runtime.Port) => void) =>
   browser.runtime.onConnect.addListener(callback);

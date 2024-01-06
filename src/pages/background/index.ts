@@ -1,9 +1,10 @@
 import reloadOnUpdate from 'virtual:reload-on-update-in-background-script';
-import 'webextension-polyfill';
 import { wrapStore } from '@eduardoac-skimlinks/webext-redux';
 import { handleConnection } from '@root/src/shared/browser/extension';
 import { configureStore } from '@root/src/dApp/configureStore';
 import { configureDependencies } from '@root/src/dApp/dependencies';
+
+import { dispatchResponder } from '@root/src/shared/redux/webext-redux/background';
 
 reloadOnUpdate('pages/background');
 
@@ -15,7 +16,9 @@ reloadOnUpdate('pages/background');
 
 const store = configureStore({ dependencies: configureDependencies() });
 store.runSideEffects();
-wrapStore(store);
+wrapStore(store, {
+  dispatchResponder,
+});
 console.log('background loaded');
 
 export type InpageMessageRequest = {
