@@ -18,12 +18,12 @@ export const NewWalletCreatePasswordPage = () => {
     try {
       setIsloading(true);
       await createWallet({ password: data.password });
+      navigate(r['/create-wallet']);
     } catch (e) {
       notificationApi.error(e.message, { position: 'bottom-center' });
     } finally {
       setIsloading(false);
     }
-    navigate(r['/create-wallet']);
   };
 
   const onSubmit = useCallback(

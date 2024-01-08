@@ -7,6 +7,7 @@ import { r } from '../../routes/routePaths';
 import { CircularLoader } from '../../components/Loader/CircularLoader';
 import { CreatePasswordForm } from '../../components/app/CreatePasswordForm';
 import { useActionAsync } from '@root/src/shared/redux/hooks/useAction';
+import { notificationApi } from '../../components/notification';
 
 export const RestoreWalletCreatePasswordPage = () => {
   const {
@@ -31,6 +32,8 @@ export const RestoreWalletCreatePasswordPage = () => {
         password: data.password,
       });
       navigate(r['/home']);
+    } catch (e) {
+      notificationApi.error(e.message);
     } finally {
       setIsLoading(false);
     }
