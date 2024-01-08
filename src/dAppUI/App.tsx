@@ -1,7 +1,6 @@
 import { Navigate, Route, Routes } from 'react-router';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-
 import { r } from './routes/routePaths';
 import { OnboardingPage } from './pages/Onboarding/OnboardingPage';
 import { CreateWalletPage } from './pages/CreateWallet/CreateWalletPage';
@@ -17,6 +16,7 @@ import { NewWalletCreatePasswordPage } from './pages/NewWalletCreatePassword/New
 import '../assets/style/all.scss';
 import { delay } from '../shared/utils';
 import { RestoreWalletCreatePasswordPage } from './pages/RestoreWalletCreatePassword/RestoreWalletCreatePasswordPage';
+import { NotificationContainer } from './components/notification';
 
 export const App = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -43,34 +43,37 @@ export const App = () => {
   return isLoading ? (
     <CircularLoader inline={false} />
   ) : (
-    <Routes>
-      <Route path={r['/home']} element={<HomePage />} />
+    <>
+      <NotificationContainer position="bottom-center" />
+      <Routes>
+        <Route path={r['/home']} element={<HomePage />} />
 
-      <Route path={r['/select-wallet-provider']} element={<ChooseProviderpage />} />
-      <Route path={r['/enter-password']} element={<EnterPasswordPage />} />
+        <Route path={r['/select-wallet-provider']} element={<ChooseProviderpage />} />
+        <Route path={r['/enter-password']} element={<EnterPasswordPage />} />
 
-      <Route path={r['/onboarding']} element={<OnboardingPage />} />
+        <Route path={r['/onboarding']} element={<OnboardingPage />} />
 
-      <Route path={r['/create-wallet']} element={<CreateWalletPage />} />
-      <Route path={r['/create-wallet/create-password']} element={<NewWalletCreatePasswordPage />} />
+        <Route path={r['/create-wallet']} element={<CreateWalletPage />} />
+        <Route path={r['/create-wallet/create-password']} element={<NewWalletCreatePasswordPage />} />
 
-      <Route path={r['/restore-wallet']} element={<RestoreWalletPage />} />
-      <Route path={r['/restore-wallet/create-password']} element={<RestoreWalletCreatePasswordPage />} />
+        <Route path={r['/restore-wallet']} element={<RestoreWalletPage />} />
+        <Route path={r['/restore-wallet/create-password']} element={<RestoreWalletCreatePasswordPage />} />
 
-      <Route
-        element={
-          hasWallet ? (
-            requirePassword ? (
-              <Navigate to={r['/enter-password']} />
+        <Route
+          element={
+            hasWallet ? (
+              requirePassword ? (
+                <Navigate to={r['/enter-password']} />
+              ) : (
+                <Navigate to={r['/home']} />
+              )
             ) : (
-              <Navigate to={r['/home']} />
+              <Navigate to={r['/onboarding']} />
             )
-          ) : (
-            <Navigate to={r['/onboarding']} />
-          )
-        }
-        index
-      />
-    </Routes>
+          }
+          index
+        />
+      </Routes>
+    </>
   );
 };

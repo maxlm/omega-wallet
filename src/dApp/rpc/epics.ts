@@ -1,4 +1,4 @@
-import { Epic, ofType, StateObservable } from 'redux-observable';
+import { type Epic, ofType } from 'redux-observable';
 import { EthRpcRequestAction, RpcActionTypes } from './actionTypes';
 import { mergeMap } from 'rxjs';
 import { DependencyContainer } from '../dependencies';
@@ -38,7 +38,10 @@ export const rpcEpic: Epic<unknown, unknown, AppState> = (
             tabId: senderId,
             messageId,
             data: {
-              error,
+              error: {
+                code: ProviderRpcErrorCodes.Disconnected,
+                message: typeof error === 'string' ? error : error?.message,
+              } as ProviderRpcError,
             },
           });
         }

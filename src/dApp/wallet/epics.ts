@@ -1,4 +1,4 @@
-import { ofType, Epic } from 'redux-observable';
+import { type Epic } from 'redux-observable';
 import { mergeMap } from 'rxjs/operators';
 import CryptoJS from 'crypto-js';
 import {
@@ -15,7 +15,13 @@ import {
   restoreWalletErrorAction,
   initWalletSuccessAction,
 } from './actions';
-import { concatActions, emptyAction, notifyFail } from '@root/src/shared/redux/redux-observable/helpers';
+import {
+  concatActions,
+  emptyAction,
+  notifyFail,
+  notifySuccess,
+  ofType,
+} from '@root/src/shared/redux/redux-observable/helpers';
 import { DependencyContainer } from '../dependencies';
 
 export const createWalletEpic: Epic = (action$, _, { walletApi, appStorage, memoryStore }: DependencyContainer) =>
@@ -23,7 +29,7 @@ export const createWalletEpic: Epic = (action$, _, { walletApi, appStorage, memo
     ofType(WalletActionTypes.CREATE_WALLET_REQUEST),
     mergeMap(async (action: CreateWalletRequestAction) => {
       try {
-        let password = action.payload.password;
+        const password = action.payload.password;
         const { wallet, phrase } = walletApi.createWallet(action.payload.phrase);
         const balance = await walletApi.getBalance(wallet.address);
         const key = CryptoJS.AES.encrypt(wallet.privateKey, password).toString();
@@ -36,15 +42,16 @@ export const createWalletEpic: Epic = (action$, _, { walletApi, appStorage, memo
         });
 
         await memoryStore.setPassword(password);
-
+        notifySuccess(action);
         return createWalletSuccessAction({
           address: wallet.address,
           secured: false,
           balance,
           phrase,
-          requirePassword: !Boolean(password),
+          requirePassword: !password,
         });
       } catch (error) {
+        notifyFail(action, error);
         return createWalletErrorAction({ error });
       }
     }),
@@ -65,33 +72,36 @@ export const restoreWalletEpic: Epic = (action$, _, { walletApi, appStorage, mem
         const privateKey = bytes.toString(CryptoJS.enc.Utf8);
         const wallet = walletApi.loadWallet(privateKey);
         const balance = await walletApi.getBalance(wallet.address);
-
+        notifySuccess(action);
         return restoreWalletSuccessAction({
           address: wallet.address,
           balance,
           secured: Boolean(password),
-          requirePassword: !Boolean(password),
+          requirePassword: !password,
         });
       } catch (error) {
+        notifyFail(action, error.message || 'Unexpected error: failed to restore wallet');
         return restoreWalletErrorAction({ error });
       }
     }),
     concatActions(),
   );
 
-export const initWalletEpic: Epic = (action$, _, { appStorage, memoryStore, extensionApi }: DependencyContainer) =>
+export const initWalletEpic: Epic = (action$, _, { appStorage, memoryStore }: DependencyContainer) =>
   action$.pipe(
     ofType(WalletActionTypes.INIT_WALLET_REQUEST),
     mergeMap(async (action: InitWalletRequestAction) => {
       try {
         const { key, secured } = await appStorage.keyStorage.get();
         const password = await memoryStore.getPassword();
+        notifySuccess(action);
         return initWalletSuccessAction({
           hasWalletStored: !!key,
           secured,
           requirePassword: !password,
         });
       } catch (error) {
+        notifyFail(action, error.message);
         return restoreWalletErrorAction({ error });
       }
     }),
@@ -107,13 +117,16 @@ export const setPasswordEpic: Epic = (action$, _, { memoryStore, appStorage }: D
       let decrypted: string;
       try {
         decrypted = CryptoJS.AES.decrypt(originalKey, password).toString(CryptoJS.enc.Utf8);
-      } catch (e) {}
-      if (!decrypted) {
-        notifyFail(action, 'wrong password');
-        return;
+        if (!decrypted) {
+          throw {
+            message: 'wrong password',
+          };
+        }
+        await memoryStore.setPassword(password);
+        notifySuccess(action);
+      } catch (e) {
+        notifyFail(action, e.message);
       }
-
-      await memoryStore.setPassword(password);
     }),
     emptyAction(),
   );

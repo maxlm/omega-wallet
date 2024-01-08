@@ -7,6 +7,7 @@ import { CircularLoader } from '../../components/Loader/CircularLoader';
 import { CreatePasswordForm } from '../../components/app/CreatePasswordForm';
 import { useActionAsync } from '@root/src/shared/redux/hooks/useAction';
 import { useNavigate } from 'react-router';
+import { notificationApi } from '../../components/notification';
 
 export const NewWalletCreatePasswordPage = () => {
   const createWallet = useActionAsync(createWalletRequestAction);
@@ -18,7 +19,7 @@ export const NewWalletCreatePasswordPage = () => {
       setIsloading(true);
       await createWallet({ password: data.password });
     } catch (e) {
-      console.error(e);
+      notificationApi.error(e.message, { position: 'bottom-center' });
     } finally {
       setIsloading(false);
     }

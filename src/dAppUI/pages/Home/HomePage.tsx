@@ -7,6 +7,7 @@ import { initWalletRequestAction, restoreWalletRequestAction } from '@root/src/d
 import { PageHeader } from '../../components/PageHeader/PageHeader';
 import { CircularLoader } from '../../components/Loader/CircularLoader';
 import { delay } from '@root/src/shared/utils';
+import { notificationApi } from '../../components/notification';
 
 export const HomePage = () => {
   const initWallet = useActionAsync(initWalletRequestAction<void>);
@@ -21,7 +22,7 @@ export const HomePage = () => {
         // UI unpleasantly blinks on local network node
         await delay(300);
       } catch (e) {
-        console.error(e);
+        notificationApi.error(e.message, { duration: Infinity, position: 'bottom-center' });
       } finally {
         setIsLoading(false);
       }

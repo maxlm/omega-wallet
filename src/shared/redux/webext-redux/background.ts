@@ -1,4 +1,3 @@
-import { delay } from '../../utils';
 import { ERROR_SYMBOL } from './shared';
 
 // this is a workaround/extension to  webext-redux
@@ -16,39 +15,40 @@ import { ERROR_SYMBOL } from './shared';
 
 //  epics.ts
 //   mergeMap(async (action: ReduxAction) => {
-//      if(actionMustEmitError) {
-//          notifyError(action, "some business rule didn't met")
+//       try {
+//          await doSomething();
+//          notifySuccess(action)
+//      } catch(error) {
+//          notifyError(action, error.message)
 //      }
 //   })
+//
+// As for me notifySuccess/notifyError is good tradeoff. As you can await actual action completion
+//and not keep ephemeral network state inside store. Especially when that store needs to be synced each time with content scripts
 
-// for actual error handling see useAction in redux/hooks/useAction
+// for actual error handling see useActionAsync in redux/hooks/useAction
 export async function dispatchResponder(dispatchResult, send) {
-  // there is some time lag until result being populated
-  await delay(2);
-  Promise.resolve(dispatchResult)
-    .then(res => {
-      if (Boolean(res?.meta?.error)) {
-        send({
-          error: null,
-          value: {
-            // send payload with ERROR_SYMBOL instead of error
-            // because webext-redux will wrap error into Error object
-            payload: {
-              [ERROR_SYMBOL]: res.meta.error,
-            },
-          },
-        });
-      } else {
-        send({
-          error: null,
-          value: res,
-        });
-      }
-    })
-    .catch(err => {
-      send({
-        error: err.message,
-        value: null,
-      });
+  try {
+    // our own completion or rejection from notifySuccess/notifyError
+    await Promise.resolve(dispatchResult?.meta?.promise);
+    // initial webex-redux error handling. dispatchResult might be rejected promise
+    // if shit happened inside store.dispatch()
+    const res = await Promise.resolve(dispatchResult);
+    send({
+      error: null,
+      value: res,
     });
+  } catch (e) {
+    send({
+      error: null,
+      value: {
+        // send payload with ERROR_SYMBOL instead of error
+        // because webext-redux will wrap error into Error object
+        // useActionAsync will reject client promise if will see ERROR_SYMBOL in payload
+        payload: {
+          [ERROR_SYMBOL]: { message: e.message },
+        },
+      },
+    });
+  }
 }

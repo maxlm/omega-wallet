@@ -1,4 +1,4 @@
-import { Epic, ofType } from 'redux-observable';
+import { type Epic, ofType } from 'redux-observable';
 import { ExtensionInteractionActionTypes, ProviderSelectedAction, SelectProviderAction } from './actionTypes';
 import { mergeMap } from 'rxjs';
 import { DependencyContainer } from '../dependencies';
@@ -32,7 +32,9 @@ export const promptSelectProviderEpic: Epic = (action$, _, { extensionApi }: Dep
             });
           },
         });
-      } catch (error) {}
+      } catch (error) {
+        console.error(error);
+      }
     }),
     emptyAction(),
   );

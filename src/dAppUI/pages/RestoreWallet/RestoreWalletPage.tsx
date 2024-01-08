@@ -13,7 +13,6 @@ export const RestoreWalletPage = () => {
     (phrase: string) => {
       // has at least 12 words
       const looksLikePhrase = phrase.split(/(\s+)/).length >= 12;
-      console.log(phrase.trim().split(/(\s+)/), phrase.split(/(\s+)/).length);
       if (!looksLikePhrase) {
         setError('phrase must be at least 12 words length');
       }
