@@ -1,10 +1,10 @@
-import { PageHeader } from '../../components/PageHeader/PageHeader';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentWallet } from '@root/src/dApp/wallet/selectors';
 
-import { useEffect, useState } from 'react';
 import { useActionAsync } from '@root/src/shared/redux/hooks/useAction';
 import { initWalletRequestAction, restoreWalletRequestAction } from '@root/src/dApp/wallet/actions';
+import { PageHeader } from '../../components/PageHeader/PageHeader';
 import { CircularLoader } from '../../components/Loader/CircularLoader';
 import { delay } from '@root/src/shared/utils';
 
@@ -21,6 +21,7 @@ export const HomePage = () => {
         // UI unpleasantly blinks on local network node
         await delay(300);
       } catch (e) {
+        console.error(e);
       } finally {
         setIsLoading(false);
       }
